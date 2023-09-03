@@ -19,7 +19,8 @@
                 <input type="text" name="roleTxt" class="form-control">
             </div>
             <div class="form-group">
-                <input type="submit" name="roleSubmitBtn" class="btn btn-dark col-12">
+                <input type="submit" value="ADD Role" name="roleSubmitBtn" class="btn btn-dark col-4 offset-2">
+                <input type="submit" value="View Roles" name="roleViewBtn" class="btn btn-dark col-4">
                 <hr style="visibility: hidden; margin: 0;">
             </div>
         </form>
@@ -37,6 +38,7 @@
             //  reference book=> head first php page 86
             $result = mysqli_query($con, $query);
             while(mysqli_next_result($con)){;}
+            // echo "<div class='col-8 offset-2'>";
             // now after the conn is success 
             // we gona make tables head => id, roles
             echo "<table class='table table-hover'>";
@@ -46,14 +48,19 @@
             // we gona fetch the data of the tables from the database
             while($row = mysqli_fetch_row($result)) {
                 echo "<tr>";
-                echo "<td>" . $row[0] . "</td>" .
-                     "<td>" . $row[1] . "</td>";
+                // echo "<td>" . $row[0] . "</td>" .
+                //      "<td>" . $row[1] . "</td>";
+                echo "<td><input type='radio' value='$row[0]'
+                 name='idRB' class='custom-radio'/></td>" . 
+                "<td>$row[1]</td>";
     
                 echo "</tr>";
                 
                 
             }
             echo "</table>";
+            // echo "</div>";
+
         }
         retriveRoles();
         ?>
@@ -77,8 +84,11 @@ if (isset($_POST["roleSubmitBtn"])){
         $arr = array($role); // the $arr is the second argument
         // ...to the insert_update_delete function
         insert_update_delete("st_insertRoles", $arr);
-        retriveRoles();
+        // retriveRoles();
 
     }
+}
+else if (isset($_POST['roleViewBtn'])){
+    retriveRoles();
 }
 ?>
