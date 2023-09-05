@@ -2,7 +2,7 @@
 
 include "connection.php";
 
-function insert_update_delete ($proc, $arr){
+function insert_update_delete ($proc, $arr, $msg){
     global $con;
     $query = "CALL " . $proc . "(";
     foreach ($arr as $a){
@@ -17,12 +17,15 @@ function insert_update_delete ($proc, $arr){
     // adding the closing parenthesis
     $query = substr_replace($query, ")", -1);
 
+    // I added the next line cuz mysqli can't.. 
+    // have two simultaneous queries..
+    // because mysqli uses unbuffered queries by default (for prepared statements
     while(mysqli_next_result($con)){;}
 
     if (mysqli_query($con, $query)){
-        echo "Inserted";
+        return $msg;
     } else {
-        echo "Not Inseted";
+        return "Error Occured While Performing Action";
     }
 
 }
