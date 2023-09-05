@@ -72,6 +72,59 @@
             echo "</div>";
 
         }
+        function retriveRoles4Edit(){
+            // session_start();
+            $role_id = $_SESSION["roleID"];
+
+            global $con;
+
+            $query = "CALL st_getRoles();";
+            
+            $result = mysqli_query($con, $query);
+            while(mysqli_next_result($con)){;}
+            
+            echo "<div class='col-8 offset-2'>";
+            
+            echo "<table class='table table-hover'>";
+            echo "<tr>";
+            echo "<th>ID</th><th>Roles</th><th class='text-end'>Actions</th>";
+            echo "</tr>"; 
+            
+            echo "<form action='' method='POST'>";
+            while($row = mysqli_fetch_row($result)) {
+                echo "<tr>";
+                if ($role_id == $row[0]){
+                    
+                    
+                    echo 
+                    "<td><input type='radio' value='$row[0]' name='idRB' class='custom-radio' checked/></td>" . 
+                    "<td><input type='textbox' value='$row[1]' nameTxt='roleEditTxt' class='form-control'/></td>" . 
+                    "<td class='text-end'><input type='submit' value='EDIT' name='editBtn' class='btn btn-dark mx-2'/>".
+                    "<input type='submit' value='UPDATE' name='updateBtn' class='btn btn-dark mx-2'/>".
+                    "<input type='submit' value='DELETE' name='deleteBtn' class='btn btn-dark'/></td>";
+                    
+                }
+                else {
+                    echo 
+                    "<td><input type='radio' value='$row[0]' name='idRB' class='custom-radio' /></td>" . 
+                    "<td>$row[1]</td>" . 
+                    "<td class='text-end'><input type='submit' value='EDIT' name='editBtn' class='btn btn-dark mx-2'/>".
+                    "<input type='submit' value='UPDATE' name='updateBtn' class='btn btn-dark mx-2'/>".
+                    "<input type='submit' value='DELETE' name='deleteBtn' class='btn btn-dark'/></td>";
+                    
+                   
+                    
+                }
+    
+                echo "</tr>";
+                
+                
+            }
+            echo "</table>";
+            echo "</form>";
+            echo "</div>";
+
+        }
         // retriveRoles();
         ?>
 
@@ -111,6 +164,17 @@ else if (isset($_POST['deleteBtn'])){
     }
     else {
         echo "<p class='text-center text-danger mt-2'>Please Select a Role first.</p>";
+        retriveRoles();
+    }
+}
+else if (isset($_POST['editBtn'])){
+    if (isset($_POST['idRB'])){
+        session_start();
+        $_SESSION["roleID"] = $_POST['idRB'];
+        retriveRoles4Edit();
+    }
+    else {
+        echo "<p class='text-center text-danger'>Please Select Any Role First.</p>";
         retriveRoles();
     }
 }
