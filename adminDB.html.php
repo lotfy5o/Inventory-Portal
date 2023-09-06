@@ -42,6 +42,7 @@
                 </nav>
                 <!-- Page content-->
                 <div class="container-fluid">
+                    <?php include "rolesCRUD.php" ?>
                 
                 </div>
             </div>
