@@ -1,3 +1,15 @@
+<?php
+
+$page_id = 0;
+if(isset($_GET["id"])){
+    $page_id = $_GET["id"]; // the id = 1 from get
+}
+else if (isset($_POST["id"])){
+    $page_id = $_POST["id"]; // the id = 1 from post
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -17,12 +29,13 @@
             <div class="border-end bg-white" id="sidebar-wrapper">
                 <div class="sidebar-heading border-bottom bg-light">A <sup>3</sup> I.T Solutions</div>
                 <div class="list-group list-group-flush">
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Dashboard</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Roles</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Users</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Suppliers</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Products</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Stock</a>
+                    <a class="list-group-item list-group-item-action bg-light" href="#">Dashboard</a>
+                    <!-- I added the query parameters (?id=1) so that I can use the Get method -->
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="adminDB.html.php?id=1">Roles</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="adminDB.html.php?id=2">Users</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="adminDB.html.php?id=3">Suppliers</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="adminDB.html.php?id=4">Products</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="adminDB.html.php?id=5">Stock</a>
                 </div>
             </div>
             <!-- Page content wrapper-->
@@ -42,7 +55,24 @@
                 </nav>
                 <!-- Page content-->
                 <div class="container-fluid">
-                    <?php include "rolesCRUD.php" ?>
+                    <?php 
+                    if ($page_id == 1){
+                        include "rolesCRUD.php";
+                    } 
+                    else if ($page_id == 2){
+                        include "usersCRUD.php";
+                    }
+                    else if ($page_id == 3){
+                        echo $page_id;
+                    }
+                    else if ($page_id == 4){
+                        echo $page_id;
+                    }
+                    else if ($page_id == 5){
+                        echo $page_id;
+                    }
+                  
+                    ?>
                 
                 </div>
             </div>
@@ -54,7 +84,7 @@
     </body>
 </html>
 <?php
-// I don't know the purpose of the next code..?..
+// // I don't know the purpose of the next code..?..
 
 // session_start();
 // if (isset($_SESSION["name"])){

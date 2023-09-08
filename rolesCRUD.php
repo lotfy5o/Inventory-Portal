@@ -21,6 +21,7 @@
             <div class="form-group">
                 <input type="submit" value="ADD Role" name="roleSubmitBtn" class="btn btn-dark col-4 offset-2">
                 <input type="submit" value="View Roles" name="roleViewBtn" class="btn btn-dark col-4">
+                <input type="hidden" name="id" value="1">
                 <hr style="visibility: hidden; margin: 0;">
             </div>
         </form>
@@ -60,7 +61,9 @@
                 "<td>$row[1]</td>" . 
                 "<td class='text-end'><input type='submit' value='EDIT' name='editBtn' class='btn btn-dark mx-2'/>".
                 "<input type='submit' value='UPDATE' name='updateBtn' class='btn btn-dark mx-2'/>".
-                "<input type='submit' value='DELETE' name='deleteBtn' class='btn btn-dark'/></td>";
+                "<input type='submit' value='DELETE' name='deleteBtn' class='btn btn-dark'/>" . 
+                "<input type='hidden' name='id' value='1'>" . 
+                "</td>";
                 
     
                 echo "</tr>";
@@ -122,6 +125,7 @@
                 
             }
             echo "</table>";
+            echo "<input type='hidden' name='id' value='1'>";
             echo "</form>";
             echo "</div>";
             echo "</form>";
