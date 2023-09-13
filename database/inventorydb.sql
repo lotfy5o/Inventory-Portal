@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 06, 2023 at 10:42 PM
+-- Generation Time: Sep 14, 2023 at 12:29 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -43,6 +43,24 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `st_getRoles` ()   BEGIN
 	SELECT roles.r_id, roles.r_name FROM roles ORDER BY roles.r_name ASC;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `st_getUsers` ()   BEGIN
+SELECT
+u.u_id as "UserID",
+u.u_name as "Name",
+u.u_email as "Email",
+u.u_phone as "Phone",
+u.u_username as "Username",
+u.u_pass as "pass",
+r.r_id as "RoleID",
+r.r_name as "Role"
+
+
+FROM users u INNER JOIN roles r 
+on r.r_id = u.u_roleID;
+
+
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `st_insertRoles` (IN `name` VARCHAR(40))   BEGIN
 	INSERT into roles (r_name) VALUES (name);
 END$$
@@ -76,9 +94,8 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`r_id`, `r_name`) VALUES
-(18, 'CEO'),
-(20, 'Office Boy'),
-(16, 'Safety Manager'),
+(16, 'admin'),
+(18, 'Manager'),
 (19, 'The Help');
 
 -- --------------------------------------------------------
@@ -102,7 +119,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`u_id`, `u_name`, `u_email`, `u_phone`, `u_roleID`, `u_username`, `u_pass`) VALUES
-(3, 'lotfy', 'lotfymoh1235o@gmail.com', '01064624648', 16, '', '12345');
+(3, 'lotfy', 'lotfymoh1235o@gmail.com', '01064624648', 16, 'lotfy5o', '12345');
 
 --
 -- Indexes for dumped tables
