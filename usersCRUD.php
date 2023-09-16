@@ -50,8 +50,29 @@
             </form>
         </div>
     </div>
+    <div class="">
+        <?php 
+        session_start();
+        if (isset($_POST['editBtn'])){
+          if (isset($_POST['idRB'])){
+            $_SESSION['userID'] = $_POST['idRB'];
+          }
+          else {
+            echo "<p class='alert alert-danger'>Please Select any User First.</p>";
+          }
+        }
+
+        ?>
+        
+        <?php  
+        include "connection.php";
+        
+        retrieve();
+        ?>
+    </div>
 </body>
 </html>
+
 <?php
 include "connection.php";
 function retrieve(){
@@ -66,7 +87,7 @@ function retrieve(){
 
             echo "<form action='' method='post'>";
             echo "<table class='table table-active'>";
-            echo "<thead>";
+            echo "<thead class='table table-active my-3'>";
                 echo "<th>ID</th>" . 
                 "<th>Name</th>" . 
                 "<th>Email</th>" . 
@@ -74,21 +95,26 @@ function retrieve(){
                 "<th>Role</th>" . 
                 "<th>RoleID</th>" . 
                 "<th>Username</th>" .
-                "<th>Password</th>" ;
+                "<th>Password</th>" .
+                "<th class=''>Actions</th>" ;
             echo "</thead>";
                  while ($row = mysqli_fetch_row($result)){
                      echo "<tr>";
-                         echo "<td>$row[0]</td>" . 
+                         echo "<td><input type='radio' name='idRB' value='$row[0]'/></td>" . 
                               "<td>$row[1]</td>" . 
                               "<td>$row[2]</td>" . 
                               "<td>$row[3]</td>" . 
                               "<td>$row[7]</td>" . 
                               "<td>$row[6]</td>" . 
                               "<td>$row[4]</td>" .
-                              "<td>$row[5]</td>" ;
+                              "<td>$row[5]</td>" .
+                              '<td><input type="submit" name="editBtn" value="Edit" class="btn btn-info mx-1" />' . 
+                              '<input type="submit" name="updateBtn" value="Update" class="btn btn-info mx-1" />' . 
+                              '<input type="submit" name="DeleteBtn" value="Delete" class="btn btn-info mx-1" /></td>' ;
                      echo "</tr>";
                      
                     }
+            echo "</table>";        
             echo "</form>";
             
         }
@@ -100,6 +126,8 @@ function retrieve(){
         echo "No";
     }
 }
-retrieve();
+
 ?>
+
+
 
