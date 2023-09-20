@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 14, 2023 at 12:29 AM
+-- Generation Time: Sep 20, 2023 at 06:58 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -28,6 +28,13 @@ DELIMITER $$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `st_deleteRoles` (`id` INT)   BEGIN
 	DELETE FROM roles
     WHERE roles.r_id = id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `st_deleteUser` (`id` INT)   BEGIN
+	DELETE FROM users 
+    WHERE users.u_id = id;
+
+
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `st_getLoginDetails` (`username` VARCHAR(30), `pass` VARCHAR(30))   BEGIN
@@ -65,15 +72,29 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `st_insertRoles` (IN `name` VARCHAR(
 	INSERT into roles (r_name) VALUES (name);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `st_insertUser` (IN `name` VARCHAR(40), IN `email` VARCHAR(50), IN `phone` VARCHAR(15), IN `roleID` INT, IN `pass` VARCHAR(30))   BEGIN
-	INSERT into users (u_name, u_email, u_phone, u_roleID, u_pass) 
-    VALUES (name, email, phone, roleID, pass);
+CREATE DEFINER=`root`@`localhost` PROCEDURE `st_insertUser` (IN `name` VARCHAR(40), IN `email` VARCHAR(50), IN `phone` VARCHAR(15), IN `roleID` INT, IN `pass` VARCHAR(30), IN `username` VARCHAR(30))   BEGIN
+	INSERT into users (u_name, u_email, u_phone, u_roleID, u_pass, u_username) 
+    VALUES (name, email, phone, roleID, pass, username);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `st_updateRoles` (`id` INT, `name` VARCHAR(40))   BEGIN
 	UPDATE roles
     set roles.r_name = name
     WHERE roles.r_id = id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `st_updateUsers` (`name` VARCHAR(40), `email` VARCHAR(40), `phone` VARCHAR(15), `roleID` INT, `username` VARCHAR(15), `pass` VARCHAR(15), `id` INT)   BEGIN
+	UPDATE users u 
+    set u.u_name = name,
+    	u.u_email = email,
+        u.u_phone = phone,
+        u.u_roleID = roleID,
+        u.u_username = username,
+        u.u_pass = pass
+        
+    WHERE u.u_id = id;
+
+
 END$$
 
 DELIMITER ;
@@ -95,8 +116,9 @@ CREATE TABLE `roles` (
 
 INSERT INTO `roles` (`r_id`, `r_name`) VALUES
 (16, 'admin'),
-(18, 'Manager'),
-(19, 'The Help');
+(19, 'Brother'),
+(1, 'Housewife'),
+(18, 'Manager');
 
 -- --------------------------------------------------------
 
@@ -119,7 +141,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`u_id`, `u_name`, `u_email`, `u_phone`, `u_roleID`, `u_username`, `u_pass`) VALUES
-(3, 'lotfy', 'lotfymoh1235o@gmail.com', '01064624648', 16, 'lotfy5o', '12345');
+(1, 'MariamWife', 'mariam2062000@gmail.com', '01021416832', 1, 'romi', '12345'),
+(3, 'lotfy', 'lotfymoh1235o@gmail.com', '01064624648', 16, 'lotfy5o', '12345'),
+(19, 'ahmed', 'ahmedlotfy@gmail.com', '01022022011', 19, 'ahmed1', '12345');
 
 --
 -- Indexes for dumped tables
@@ -154,7 +178,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `u_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `u_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- Constraints for dumped tables

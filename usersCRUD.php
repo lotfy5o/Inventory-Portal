@@ -78,6 +78,8 @@
 
 <?php
 include "connection.php";
+include "validate.php";
+include "crud.php";
 function retrieve(){
     global $con;
     if ($con){
@@ -114,7 +116,7 @@ function retrieve(){
                               "<td>$row[5]</td>" .
                               '<td><input type="submit" name="editBtn" value="Edit" class="btn btn-info mx-1" />' . 
                               '<input type="submit" name="updateBtn" value="Update" class="btn btn-info mx-1" />' . 
-                              '<input type="submit" name="DeleteBtn" value="Delete" class="btn btn-info mx-1" /></td>' ;
+                              '<input type="submit" name="deleteBtn" value="Delete" class="btn btn-info mx-1" /></td>' ;
                      echo "</tr>";
                      
                     }
@@ -166,6 +168,7 @@ function retrieve4Edit(){
                                     "<td><input type='textbox' value='$row[1]' name='nameTxt' class='form-control'/></td>" . 
                                     "<td><input type='textbox' value='$row[2]' name='emailTxt' class='form-control'/></td>" . 
                                     "<td><input type='textbox' value='$row[3]' name='phoneTxt' class='form-control'/></td><td>" ;
+                                    // if u concatinate the next line and don't use echo statement it will go different.
                                     echo getRoles();
                                     echo "</td>" . 
 
@@ -193,7 +196,7 @@ function retrieve4Edit(){
                                 '<td>' .
                                 '<input type="submit" name="editBtn" value="Edit" class="btn btn-info mx-1" />' . 
                                 '<input type="submit" name="updateBtn" value="Update" class="btn btn-info mx-1" />' . 
-                                '<input type="submit" name="DeleteBtn" value="Delete" class="btn btn-info mx-1" />' .
+                                '<input type="submit" name="deleteBtn" value="Delete" class="btn btn-info mx-1" />' .
                                 '</td>';
                               
                                 
@@ -215,6 +218,81 @@ function retrieve4Edit(){
 
 }
 if (isset($_POST['viewBtn'])){
+    retrieve();
+}
+elseif (isset($_POST['updateBtn'])){
+    
+        // $_POST['idRB'] == when you chech the radio the $_post['idRB] is set
+    if (isset($_POST['idRB'])){
+        include "validate.php";
+        include "crud.php";
+        $userID  = validate($_POST['idRB']);
+        $name     = validate($_POST['nameTxt']);
+        $email    = validate($_POST['emailTxt']);
+        $phone    = validate($_POST['phoneTxt']);
+        // roleDD is coming from getRoles.php
+        $roleID   = validate($_POST['roleDD']);
+        $username = validate($_POST['usernameTxt']);
+        $pass     = validate($_POST['passTxt']);
+
+        $arr = array($name, $email, $phone, $roleID, $username, $pass, $userID);
+        $msg = insert_update_delete("st_updateUsers", $arr, "User Updated Successfully");
+        echo "<p class='text-info text-center'>$msg</p>";
+        
+        }
+    else {
+        echo "<p class='alert alert-danger'>Please Select any User First.</p>";
+        
+    }
+    retrieve();
+}
+elseif (isset($_POST['deleteBtn'])){
+    if (isset($_POST['idRB'])){
+        $id = $_POST['idRB'];
+        $arr = array($id);
+        $res = insert_update_delete("st_deleteUser", $arr, "User Deleted Successfully.");
+        echo "<p class='text-center text-info'>$res</p>";
+        retrieve();
+    }
+    else {
+        echo "<p class='text-center text-danger mt-2'>Please Select a User first.</p>";
+        retrieve();
+    }
+}
+elseif (isset($_POST['saveBtn'])){
+           // $_POST['idRB'] == when you chech the radio the $_post['idRB] is set
+            
+            include "validate.php";
+            include "crud.php";
+            
+            $name     = validate($_POST['nameTxt']);
+            $email    = validate($_POST['emailTxt']);
+            $phone    = validate($_POST['phoneTxt']);
+            // roleDD is coming from getRoles.php
+            $roleID   = validate($_POST['roleDD']);
+            $username = validate($_POST['usernameTxt']);
+            $pass     = validate($_POST['passTxt']);
+    
+            $arr = array($name, $email, $phone, $roleID, $pass, $username);
+
+        // this next code should be added to the validate function
+        $empty = false;
+        foreach ($arr as $a){
+            if (empty($a)){
+                $empty = true;
+           
+            }
+            
+        }
+        if ($empty){
+            echo "<p class='alert alert-danger'>Please Enter Valid Records.</p>";
+        }
+               
+        else {
+            $msg = insert_update_delete("st_insertUser", $arr, "User Added Successfully");
+            echo "<p class='text-info text-center'>$msg</p>";
+            
+        }
     retrieve();
 }
 ?>
