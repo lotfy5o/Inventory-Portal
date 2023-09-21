@@ -15,15 +15,15 @@
             <form action="" method="post">
                 <div class="form-group">
                     <label for="">Name</label>
-                    <input type="text" name="nameTxt" class="form-control">
+                    <input type="text" name="nameTxt" class="form-control form-control-sm">
                 </div>
                 <div class="form-group">
                     <label for="">Email</label>
-                    <input type="email" name="emailTxt" class="form-control">
+                    <input type="email" name="emailTxt" class="form-control form-control-sm">
                 </div>
                 <div class="form-group">
                     <label for="">Phone</label>
-                    <input type="text" name="phoneTxt" class="form-control">
+                    <input type="text" name="phoneTxt" class="form-control form-control-sm">
                 </div>
                 <div class="form-control">
                     <label for="">Roles</label>
@@ -36,23 +36,25 @@
                 </div>
                 <div class="form-group">
                     <label for="">Username</label>
-                    <input type="text" name="usernameTxt" class="form-control">
+                    <input type="text" name="usernameTxt" class="form-control form-control-sm">
                 </div>
                 <div class="form-group">
                     <label for="">Password</label>
-                    <input type="text" name="passTxt" class="form-control">
+                    <input type="text" name="passTxt" class="form-control form-control-sm">
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Save" name="saveBtn" class="btn btn-info col-4 offset-2 my-4">
-                    <input type="submit" value="View" name="viewBtn" class="btn btn-info col-4 my-4">
+                    <input type="submit" value="Save" name="saveBtn" class="btn btn-info btn-sm col-4 offset-2 my-4">
+                    <input type="submit" value="View" name="viewBtn" class="btn btn-info btn-sm col-4 my-4">
                 </div>
 
+                <input type="hidden" name="id" value="2">
             </form>
         </div>
     </div>
     <div class="">
         <?php 
-        session_start();
+        // I commented the next line since the session already started
+        // session_start();
         if (isset($_POST['editBtn'])){
             // $_POST['idRB'] == when you chech the radio the $_post['idRB] is set
           if (isset($_POST['idRB'])){
@@ -92,6 +94,9 @@ function retrieve(){
 
 
             echo "<form action='' method='post'class='col-10 offset-1'>";
+            // the next line is for the page_id => navigating pages
+            echo "<input type='hidden' name='id' value='2'>";
+
             echo "<table class='table table-active'>";
             echo "<thead class='table table-active my-3'>";
                 echo "<th>ID</th>" . 
@@ -114,9 +119,9 @@ function retrieve(){
                               "<td>$row[6]</td>" . 
                               "<td>$row[4]</td>" .
                               "<td>$row[5]</td>" .
-                              '<td><input type="submit" name="editBtn" value="Edit" class="btn btn-info mx-1" />' . 
-                              '<input type="submit" name="updateBtn" value="Update" class="btn btn-info mx-1" />' . 
-                              '<input type="submit" name="deleteBtn" value="Delete" class="btn btn-info mx-1" /></td>' ;
+                              '<td><input type="submit" name="editBtn" value="Edit" class="btn btn-info btn-sm mx-1" />' . 
+                              '<input type="submit" name="updateBtn" value="Update" class="btn btn-info btn-sm mx-1" />' . 
+                              '<input type="submit" name="deleteBtn" value="Delete" class="btn btn-info btn-sm mx-1" /></td>' ;
                      echo "</tr>";
                      
                     }
@@ -146,6 +151,7 @@ function retrieve4Edit(){
         if (mysqli_num_rows($result) > 0){
 
             echo "<form action='' method='post' class='col-10 offset-1'>";
+            echo "<input type='hidden' name='id' value='2'>";
             echo "<table class='table table-active col-6'>";
             echo "<thead class='table table-active my-3'>";
                 echo "<th>ID</th>" . 
@@ -165,20 +171,20 @@ function retrieve4Edit(){
                         
                         echo "<tr>";
                             echo    "<td><input type='radio'   value='$row[0]' name='idRB' class='custom-radio' checked/></td>" . 
-                                    "<td><input type='textbox' value='$row[1]' name='nameTxt' class='form-control'/></td>" . 
-                                    "<td><input type='textbox' value='$row[2]' name='emailTxt' class='form-control'/></td>" . 
-                                    "<td><input type='textbox' value='$row[3]' name='phoneTxt' class='form-control'/></td><td>" ;
+                                    "<td><input type='textbox' value='$row[1]' name='nameTxt' class='form-control form-control-sm'/></td>" . 
+                                    "<td><input type='textbox' value='$row[2]' name='emailTxt' class='form-control form-control-sm'/></td>" . 
+                                    "<td><input type='textbox' value='$row[3]' name='phoneTxt' class='form-control form-control-sm'/></td><td>" ;
                                     // if u concatinate the next line and don't use echo statement it will go different.
                                     echo getRoles();
                                     echo "</td>" . 
 
-                                    "<td><input type='textbox' value='$row[4]' name='usernameTxt' class='form-control'/></td>" . 
-                                    "<td><input type='textbox' value='$row[5]' name='passTxt' class='form-control'/></td>" . 
+                                    "<td><input type='textbox' value='$row[4]' name='usernameTxt' class='form-control form-control-sm'/></td>" . 
+                                    "<td><input type='textbox' value='$row[5]' name='passTxt'     class='form-control form-control-sm'/></td>" . 
 
                                     "<td>" . 
-                                    "<input type='submit' value='EDIT' name='editBtn' class='btn btn-info mx-1'/>".
-                                    "<input type='submit' value='UPDATE' name='updateBtn' class='btn btn-info mx-1'/>".
-                                    "<input type='submit' value='DELETE' name='deleteBtn' class='btn btn-info mx-1'/>".
+                                    "<input type='submit' value='EDIT'   name='editBtn'   class='btn btn-info btn-sm mx-1'/>".
+                                    "<input type='submit' value='UPDATE' name='updateBtn' class='btn btn-info btn-sm mx-1'/>".
+                                    "<input type='submit' value='DELETE' name='deleteBtn' class='btn btn-info btn-sm mx-1'/>".
                                     "</td>";
 
                         echo "</tr>";
@@ -194,9 +200,9 @@ function retrieve4Edit(){
                                 "<td>$row[5]</td>" . 
                                 
                                 '<td>' .
-                                '<input type="submit" name="editBtn" value="Edit" class="btn btn-info mx-1" />' . 
-                                '<input type="submit" name="updateBtn" value="Update" class="btn btn-info mx-1" />' . 
-                                '<input type="submit" name="deleteBtn" value="Delete" class="btn btn-info mx-1" />' .
+                                '<input type="submit" name="editBtn"   value="Edit"   class="btn btn-info btn-sm mx-1" />' . 
+                                '<input type="submit" name="updateBtn" value="Update" class="btn btn-info btn-sm mx-1" />' . 
+                                '<input type="submit" name="deleteBtn" value="Delete" class="btn btn-info btn-sm mx-1" />' .
                                 '</td>';
                               
                                 
