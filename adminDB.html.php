@@ -34,8 +34,9 @@ else if (isset($_POST["id"])){
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="adminDB.html.php?id=1">Roles</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="adminDB.html.php?id=2">Users</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="adminDB.html.php?id=3">Suppliers</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="adminDB.html.php?id=4">Products</a>
-                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="adminDB.html.php?id=5">Stock</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="adminDB.html.php?id=4">Categories</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="adminDB.html.php?id=5">Sizes</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="adminDB.html.php?id=6">Colors</a>
                 </div>
             </div>
             <!-- Page content wrapper-->
@@ -69,7 +70,10 @@ else if (isset($_POST["id"])){
                         include "categoriesCRUD.php";
                     }
                     else if ($page_id == 5){
-                        echo $page_id;
+                        include "sizesCRUD.php";
+                    }
+                    else if ($page_id == 6){
+                        include "colorsCRUD.php";
                     }
                   
                     ?>
