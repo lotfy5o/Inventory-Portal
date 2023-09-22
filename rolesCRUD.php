@@ -19,7 +19,7 @@
                 <input type="text" name="roleTxt" class="form-control">
             </div>
             <div class="form-group">
-                <input type="submit" value="ADD Role" name="roleSubmitBtn" class="btn btn-dark col-4 offset-2">
+                <input type="submit" value="ADD Role" name="roleSubmitBtn" class="btn btn-dark col-4 offset-2 my-1">
                 <input type="submit" value="View Roles" name="roleViewBtn" class="btn btn-dark col-4">
                 <input type="hidden" name="id" value="1">
                 <hr style="visibility: hidden; margin: 0;">

@@ -230,20 +230,33 @@ elseif (isset($_POST['updateBtn'])){
     
         // $_POST['idRB'] == when you chech the radio the $_post['idRB] is set
     if (isset($_POST['idRB'])){
-        include "validate.php";
-        include "crud.php";
-        $userID  = validate($_POST['idRB']);
-        $name     = validate($_POST['nameTxt']);
-        $email    = validate($_POST['emailTxt']);
-        $phone    = validate($_POST['phoneTxt']);
-        // roleDD is coming from getRoles.php
-        $roleID   = validate($_POST['roleDD']);
-        $username = validate($_POST['usernameTxt']);
-        $pass     = validate($_POST['passTxt']);
-
-        $arr = array($name, $email, $phone, $roleID, $username, $pass, $userID);
-        $msg = insert_update_delete("st_updateUsers", $arr, "User Updated Successfully");
-        echo "<p class='text-info text-center'>$msg</p>";
+        // include "validate.php";
+        // include "crud.php";
+        $userID   = $_POST['idRB'];
+        $name     = $_POST['nameTxt'];
+        $email    = $_POST['emailTxt'];
+        $phone    = $_POST['phoneTxt'];
+        $roleID   = $_POST['roleDD'];
+        $username = $_POST['usernameTxt'];
+        $pass     = $_POST['passTxt'];
+    
+        if (!empty($name) && !empty($email) && !empty($phone) && !empty($roleID) && !empty($username) && !empty($pass)) {
+            $userID  = validate($_POST['idRB']);
+            $name     = validate($_POST['nameTxt']);
+            $email    = validate($_POST['emailTxt']);
+            $phone    = validate($_POST['phoneTxt']);
+            // roleDD is coming from getRoles.php
+            $roleID   = validate($_POST['roleDD']);
+            $username = validate($_POST['usernameTxt']);
+            $pass     = validate($_POST['passTxt']);
+    
+            $arr = array($name, $email, $phone, $roleID, $username, $pass, $userID);
+            $msg = insert_update_delete("st_updateUsers", $arr, "User Updated Successfully");
+            echo "<p class='text-info text-center'>$msg</p>";
+        }
+        else {
+            echo "<p class='text-danger text-center'>Some data are Empty</p>";
+        }
         
         }
     else {
@@ -268,8 +281,8 @@ elseif (isset($_POST['deleteBtn'])){
 elseif (isset($_POST['saveBtn'])){
            // $_POST['idRB'] == when you chech the radio the $_post['idRB] is set
             
-            include "validate.php";
-            include "crud.php";
+            // include "validate.php";
+            // include "crud.php";
             
             $name     = validate($_POST['nameTxt']);
             $email    = validate($_POST['emailTxt']);
