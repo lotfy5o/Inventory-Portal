@@ -124,7 +124,7 @@ else if (isset($_POST['deleteBtn'])){
         $id = $_POST['idRB'];
         $arr = array($id);
         $msg = insert_update_delete("st_deleteSuppliers", $arr, "Supplier Deleted Successfully");
-        echo "<p text-info text-center>$msg</p>";
+        echo "<p class='text-info text-center'>$msg</p>";
     }
     else {
         echo "<p class='alert alert-danger text-center'>Please Select a Supplier</p>";

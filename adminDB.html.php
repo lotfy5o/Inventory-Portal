@@ -66,7 +66,7 @@ else if (isset($_POST["id"])){
                         include "suppliersCRUD.php";
                     }
                     else if ($page_id == 4){
-                        echo $page_id;
+                        include "categoriesCRUD.php";
                     }
                     else if ($page_id == 5){
                         echo $page_id;
