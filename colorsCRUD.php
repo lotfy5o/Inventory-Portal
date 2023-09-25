@@ -65,7 +65,7 @@ else if (isset($_POST['editBtn'])){
         retrieve4Edit();
     }
     else {
-        echo "<p class='alert alert-danger text-center'>Please Select a Supplier</p>";
+        echo "<p class='alert alert-danger text-center'>Please Select a Color</p>";
         retrieve();
     }
         
@@ -208,7 +208,7 @@ function retrieve4Edit (){
             echo "</div>";
         }
         else {
-            echo "<p class='alert-info text-center'>No Supplier Available</p>";
+            echo "<p class='alert alert-info text-center'>No Color Available</p>";
         }
     
     }
