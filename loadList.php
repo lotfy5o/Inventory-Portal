@@ -3,7 +3,7 @@
 // we did a universal fucntion 
 include "connection.php";
 
-function getList($pro, $selectName){
+function getList($pro, $selectName, $con){
     global $con;
     if ($con){
         $query = "CALL $pro;";
@@ -11,7 +11,7 @@ function getList($pro, $selectName){
         while(mysqli_next_result($con)){;}
 
         if (mysqli_num_rows($result) > 0) {
-            echo "<select class='form-select form-select-sm' name='$selectName'>";
+            echo "<select class='form-select form-select-sm' name='$selectName' id='$selectName'>";
             // if I deleted the next line the drop down menu will only pick the last 
             // in the table and not showing the "Choose.." between the option tag
             // answer= I forgot o put ">" in the end of the select

@@ -15,8 +15,13 @@
             <form action="" method="post">
                 <input type='hidden' value='5'>
                 <div class="form-group">
-                    <label for="">Name</label>
+                    <label for="">Size</label>
                     <input type="text" name="nameTxt" class="form-control form-control-sm">
+                </div>
+                <div class="form-group">
+                    <label for="">Category</label>
+                    <?php include "loadList.php"; getList("st_getCategories", "catDD");   ?>
+
                 </div>
                 
                 <div>
@@ -37,13 +42,15 @@ include "validate.php";
 include "crud.php";
 if (isset($_POST['saveBtn'])){
     $name    = $_POST['nameTxt'];
+    $catID   = $_POST['catDD'];
    
     
-    if (!empty($name)){
+    if (!empty($name) && !empty($catID)){
         $name = validate($name);
+        $catId = validate($catID);
         
 
-        $arr = array($name);
+        $arr = array($name, $catID);
         $msg = insert_update_delete("st_insertSizes", $arr, "Size added Successfully");
         echo "<p class='text-success text-center'>$msg</p>";
     }
@@ -76,9 +83,10 @@ else if (isset($_POST['updateBtn'])){
         
         if (!empty($name)){
             $name    = validate($_POST['name']);
-            
-            $cat_id = validate($_POST['idRB']);
-            $arr = array($name, $cat_id);
+            $sizeID = validate($_POST['idRB']);
+            $catID = validate($_POST['catDD']);
+
+            $arr = array($name, $sizeID, $catID);
             $msg = insert_update_delete("st_updateSizes", $arr, "Size Upadated Successfully");
             echo "<p class='text-success text-center'>$msg</p>";
         }
