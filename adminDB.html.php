@@ -37,6 +37,7 @@ else if (isset($_POST["id"])){
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="adminDB.html.php?id=4">Categories</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="adminDB.html.php?id=5">Sizes</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="adminDB.html.php?id=6">Colors</a>
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="adminDB.html.php?id=7">Purchase Invoice</a>
                 </div>
             </div>
             <!-- Page content wrapper-->
@@ -75,6 +76,9 @@ else if (isset($_POST["id"])){
                     else if ($page_id == 6){
                         include "colorsCRUD.php";
                     }
+                    else if ($page_id == 7){
+                        include "purchaseInvoice.php";
+                    }
                   
                     ?>
                 
@@ -94,7 +98,7 @@ else if (isset($_POST["id"])){
 // if (isset($_SESSION["name"])){
 
 // } else {
-//     header("Location:authenticate.hmlt.php");
+//     header("Location:authenticate.html.php");
 // }
 
 ?>

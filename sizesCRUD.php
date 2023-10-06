@@ -20,7 +20,7 @@
                 </div>
                 <div class="form-group">
                     <label for="">Category</label>
-                    <?php include "loadList.php"; getList("st_getCategories", "catDD");   ?>
+                    <?php include "loadList.php"; getList("st_getCategories", "catDD", $con);   ?>
 
                 </div>
                 
@@ -122,7 +122,7 @@ function retrieve (){
     global $con;
     if ($con){
 
-        $query = "CALL st_getSizes();";
+        $query = "CALL st_getSizes($catID);";
         $result = mysqli_query($con, $query);
         while(mysqli_next_result($con)){;}
 
