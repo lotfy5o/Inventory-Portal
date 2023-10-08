@@ -72,18 +72,20 @@ else if (isset($_POST['editBtn'])){
         retrieve4Edit();
     }
     else {
-        echo "<p class='alert alert-danger text-center'>Please Select a Supplier</p>";
+        echo "<p class='alert alert-danger text-center'>Please Select a Size</p>";
         retrieve();
     }
         
 }
 else if (isset($_POST['updateBtn'])){
     if (isset($_POST['idRB'])){
-        $name    = $_POST['name'];
+
+        $sizeID = $_POST['idRB'];
         
-        if (!empty($name)){
-            $name    = validate($_POST['name']);
-            $sizeID = validate($_POST['idRB']);
+        if (!empty($_POST['nameTxt']) && !empty($_POST['catDD'])){
+            $name    = validate($_POST['nameTxt']);
+            // the problem is the parent table wouldn't have the new updated value
+            // it will exist only on the size table
             $catID = validate($_POST['catDD']);
 
             $arr = array($name, $sizeID, $catID);
@@ -122,7 +124,7 @@ function retrieve (){
     global $con;
     if ($con){
 
-        $query = "CALL st_getSizes($catID);";
+        $query = "CALL st_getAllSizes();";
         $result = mysqli_query($con, $query);
         while(mysqli_next_result($con)){;}
 
@@ -134,23 +136,28 @@ function retrieve (){
         
             echo "<thead>";
             echo "<th>ID</th>" . 
-                 "<th>Name</th>" . 
-                 "<th>Actions</th>" ;
-            echo "</thead>";     
+                 "<th>Size</th>" . 
+                 "<th class='col-3'>Category</th>" . 
+                 "<th class='col-4'>Actions</th>" ;
+            echo "</thead>"; 
+            echo "<tbody>";    
             while ($row = mysqli_fetch_row($result)){
                 echo "<tr>";
                 echo "<td><input type='radio' name='idRB' value='$row[0]'/></td>";
                 echo "<td>$row[1]</td>";
+                // echo "<td>$row[2]</td>";
+                echo "<td>$row[3]</td>";
                 echo "<td>" . 
-                     "<input type='submit' name='editBtn'   value='Edit'   class='btn btn-success btn-sm' />" . 
+                     "<input type='submit' name='editBtn'   value='Edit'   class='btn btn-info btn-sm' />" . 
                      "<input type='submit' name='updateBtn' value='Update' class='btn btn-success btn-sm mx-1' />" . 
-                     "<input type='submit' name='deleteBtn' value='Delete' class='btn btn-success btn-sm' />" ; 
+                     "<input type='submit' name='deleteBtn' value='Delete' class='btn btn-warning btn-sm' />" ; 
                 echo "</td>";
                 echo "</tr>";
         
             }
         
             echo "</form>";
+            echo "</tbody>";
             echo "</table>";
             echo "</div>";
         }
@@ -163,66 +170,79 @@ function retrieve (){
         echo "No";
     }
 }
-function retrieve4Edit (){
+
+function retrieve4Edit(){
     global $con;
     if ($con){
-
-        $query = "CALL st_getSizes();";
+        while(mysqli_next_result($con)){;}
+        $query = "CALL st_getAllSizes();";
         $result = mysqli_query($con, $query);
         while(mysqli_next_result($con)){;}
 
+
+
         if (mysqli_num_rows($result) > 0){
-            echo "<div class='col-6 offset-3'>";
+
+            echo "<form action='' method='post' class='col-6 offset-3'>";
+            echo "<input type='hidden' name='id' value='2'>";
             echo "<table class='table table-bordered table-hover'>";
-            echo "<form action='' method='post'>";
-            echo "<input type='hidden' name='id' value='5'>";
-        
-            echo "<thead>";
-            echo "<th>ID</th>" . 
-                 "<th>Name</th>" . 
-                 "<th>Actions</th>" ;
-            echo "</thead>";     
-            while ($row = mysqli_fetch_row($result)){
-                if ($_SESSION['sizeID'] == $row[0]){
+            echo "<thead class='table table-bordered table-hover my-3'>";
+                echo "<th>ID</th>" . 
+                "<th class='col-3'>Size</th>" . 
+                "<th class='col-3'>Category</th>" . 
+                "<th class='col-4'>Actions</th>" ;
+            echo "</thead>";
+                 while ($row = mysqli_fetch_row($result)){
+                    // if the id in idRB matches the id in the row of the table
+                    if ($_SESSION['sizeID'] == $row[0]){
+                        
+                        
+                        echo "<tr>";
+                            echo    "<td><input type='radio'   value='$row[0]' name='idRB' class='custom-radio' checked/></td>" . 
+                                    "<td><input type='textbox' value='$row[1]' name='nameTxt' class='form-control form-control-sm'/></td>" ;
 
-                    echo "<tr>";
-                    echo "<td><input type='radio'   name='idRB'    value='$row[0]' checked/></td>";
-                    echo "<td><input type='textbox' name='name'    value='$row[1]' class='form-control form-control-sm'/></td>";
-                    echo "<td>" . 
-                         "<input type='submit' name='editBtn'   value='Edit'   class='btn btn-success btn-sm' />" . 
-                         "<input type='submit' name='updateBtn' value='Update' class='btn btn-success btn-sm mx-1' />" . 
-                         "<input type='submit' name='deleteBtn' value='Delete' class='btn btn-success btn-sm' />" ; 
-                    echo "</td>";
+                                    echo "<td>";
+                                    echo getList("st_getCategories", "catDD", $con);
+                                    echo "</td>" . 
+
+
+                                    "<td>" . 
+                                    "<input type='submit' value='EDIT'   name='editBtn'   class='btn btn-info btn-sm mx-1'/>".
+                                    "<input type='submit' value='UPDATE' name='updateBtn' class='btn btn-success btn-sm mx-1'/>".
+                                    "<input type='submit' value='DELETE' name='deleteBtn' class='btn btn-warning btn-sm mx-1'/>".
+                                    "</td>";
+
+                        echo "</tr>";
+                    }
+                    else {
+                        echo "<tr>";
+                            echo "<td><input type='radio' name='idRB' value='$row[0]'/></td>" . 
+                                "<td>$row[1]</td>" . 
+                                "<td>$row[3]</td>" . 
+                               
+                                
+                                '<td>' .
+                                '<input type="submit" name="editBtn"   value="Edit"   class="btn btn-info btn-sm mx-1" />' . 
+                                '<input type="submit" name="updateBtn" value="Update" class="btn btn-success btn-sm mx-1" />' . 
+                                '<input type="submit" name="deleteBtn" value="Delete" class="btn btn-warning btn-sm mx-1" />' .
+                                '</td>';
+                              
+                                
+                    }
                     echo "</tr>";
+                                      
                 }
-                else {
-                    echo "<tr>";
-                    echo "<td><input type='radio' name='idRB' value='$row[0]' checked/></td>";
-                    echo "<td>$row[1]</td>";
-                    echo "<td>" . 
-                         "<input type='submit' name='editBtn'   value='Edit'   class='btn btn-success btn-sm' />" . 
-                         "<input type='submit' name='updateBtn' value='Update' class='btn btn-success btn-sm mx-1' />" . 
-                         "<input type='submit' name='deleteBtn' value='Delete' class='btn btn-success btn-sm' />" ; 
-                    echo "</td>";
-                    echo "</tr>";
-
-                }
-        
-            }
-
-        
+            echo "</table>";        
             echo "</form>";
-            echo "</table>";
-            echo "</div>";
+            
         }
         else {
-            echo "<p class='alert-info text-center'>No Supplier Available</p>";
+            echo "No Record Are Available";
         }
-    
     }
     else {
         echo "No";
     }
-}
 
+}
 ?>
