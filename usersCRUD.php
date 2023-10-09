@@ -206,8 +206,8 @@ function retrieve4Edit(){
                                 '</td>';
                               
                                 
+                        echo "</tr>";
                     }
-                    echo "</tr>";
                                       
                 }
             echo "</table>";        

@@ -31,5 +31,31 @@ function getList($pro, $selectName, $con){
         echo "no";
     }
 }
+function getLastID($pro, $con){
+    global $con;
+    if ($con){
+        $query = "CALL $pro;";
+        $result = mysqli_query($con, $query);
+        while(mysqli_next_result($con)){;}
+
+        if (mysqli_num_rows($result) > 0) {
+            
+            $id;
+
+            while($row = mysqli_fetch_row($result)){
+                $id = $row[0];
+            }
+            return $id;
+
+        }
+        else {
+            echo "<p class='alert alert-danger'>No Record Available</p>";
+        }
+        
+    }
+    else {
+        echo "Connection Failed";
+    }
+}
 
 ?>
