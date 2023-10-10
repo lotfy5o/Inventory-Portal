@@ -7,20 +7,28 @@
     <link rel="stylesheet" href="Styles/bootstrap.min.css">
     
     <script defer src="Scripts/bootstrap.bundle.min.js"></script>
+    <style>
+        .alert {
+        margin-bottom: 1px;
+        height: 30px;
+        line-height:30px;
+        padding:0px 15px;
+        }
+    </style>
 </head>
 <body>
   
 <div class="container">
     <div class="col-8 offset-2">
-        <h2 class="text-center">Role Management</h2>
+        <h2 class="text-center display-4" style="margin-top: 20px;">Role Management</h2>
         <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post" id="roleForm">
-            <div class="form-group">
+            <div class="form-group col-4 offset-4">
                 <label for="">Role</label>
-                <input type="text" name="roleTxt" class="form-control">
+                <input type="text" name="roleTxt" class="form-control form-control-sm">
             </div>
             <div class="form-group">
-                <input type="submit" value="ADD Role" name="roleSubmitBtn" class="btn btn-dark col-4 offset-2 my-1">
-                <input type="submit" value="View Roles" name="roleViewBtn" class="btn btn-dark col-4">
+                <input type="submit" value="ADD Role" name="roleSubmitBtn" class="btn btn-sm btn-success col-3 offset-3 my-3">
+                <input type="submit" value="View Roles" name="roleViewBtn" class="btn btn-sm btn-primary col-3">
                 <input type="hidden" name="id" value="1">
                 <hr style="visibility: hidden; margin: 0;">
             </div>
@@ -29,6 +37,8 @@
         include "connection.php";
         include "crud.php";
         include "validate.php";
+        include "message.php";
+
         function retriveRoles(){
             global $con;
 
@@ -44,7 +54,7 @@
             echo "<div class='col-8 offset-2'>";
             // now after the conn is success 
             // we gona make tables head => id, roles
-            echo "<table class='table table-hover'>";
+            echo "<table class='table table-hover table-responsive-sm'>";
             echo "<tr>";
             echo "<th>ID</th><th>Roles</th><th class='text-end'>Actions</th>";
             echo "</tr>"; 
@@ -59,10 +69,11 @@
                 echo "<td><input type='radio' value='$row[0]'
                 name='idRB' class='custom-radio'/></td>" . 
                 "<td>$row[1]</td>" . 
-                "<td class='text-end'><input type='submit' value='EDIT' name='editBtn' class='btn btn-dark mx-2'/>".
-                "<input type='submit' value='UPDATE' name='updateBtn' class='btn btn-dark mx-2'/>".
-                "<input type='submit' value='DELETE' name='deleteBtn' class='btn btn-dark'/>" . 
-                "<input type='hidden' name='id' value='1'>" . 
+                "<td class='text-end'>" . 
+                    "<input type='submit' value='EDIT' name='editBtn'     class='btn btn-sm btn-warning mx-2'/>" .
+                    "<input type='submit' value='UPDATE' name='updateBtn' class='btn btn-sm btn-success mx-2'/>" .
+                    "<input type='submit' value='DELETE' name='deleteBtn' class='btn btn-sm btn-danger'/>" . 
+                    "<input type='hidden' name='id' value='1'>" . 
                 "</td>";
                 
     
@@ -101,20 +112,24 @@
                     
                     
                     echo 
-                    "<td><input type='radio' value='$row[0]' name='idRB' class='custom-radio' checked/></td>" . 
-                    "<td><input type='textbox' value='$row[1]' name='roleEditTxt' class='form-control'/></td>" . 
-                    "<td class='text-end'><input type='submit' value='EDIT' name='editBtn' class='btn btn-dark mx-2'/>".
-                    "<input type='submit' value='UPDATE' name='updateBtn' class='btn btn-dark mx-2'/>".
-                    "<input type='submit' value='DELETE' name='deleteBtn' class='btn btn-dark'/></td>";
+                    "<td><input type='radio' value='$row[0]'   name='idRB' class='custom-radio' checked/></td>" . 
+                    "<td><input type='textbox' value='$row[1]' name='roleEditTxt' class='form-control form-control-sm'/></td>" . 
+                    "<td class='text-end'>" . 
+                    "<input type='submit' value='EDIT'   name='editBtn'   class='btn btn-sm btn-warning mx-2'/>".
+                    "<input type='submit' value='UPDATE' name='updateBtn' class='btn btn-sm btn-success mx-2'/>".
+                    "<input type='submit' value='DELETE' name='deleteBtn' class='btn btn-sm btn-danger'/>" . 
+                    "</td>";
                     
                 }
                 else {
                     echo 
                     "<td><input type='radio' value='$row[0]' name='idRB' class='custom-radio' /></td>" . 
                     "<td>$row[1]</td>" . 
-                    "<td class='text-end'><input type='submit' value='EDIT' name='editBtn' class='btn btn-dark mx-2'/>".
-                    "<input type='submit' value='UPDATE' name='updateBtn' class='btn btn-dark mx-2'/>".
-                    "<input type='submit' value='DELETE' name='deleteBtn' class='btn btn-dark'/></td>";
+                    "<td class='text-end'>" . 
+                    "<input type='submit' value='EDIT'   name='editBtn'   class='btn btn-sm btn-warning mx-2'/>".
+                    "<input type='submit' value='UPDATE' name='updateBtn' class='btn btn-sm btn-success mx-2'/>".
+                    "<input type='submit' value='DELETE' name='deleteBtn' class='btn btn-sm btn-danger'/>" . 
+                    "</td>";
                     
                    
                     
@@ -153,9 +168,14 @@ if (isset($_POST["roleSubmitBtn"])){
     if (!empty($role)){
         $arr = array($role); // the $arr is the second argument
         // ...to the insert_update_delete function
-        insert_update_delete("st_insertRoles", $arr, "Role Added Successfully.");
+        $res = insert_update_delete("st_insertRoles", $arr, "$role Added Successfully.");
+        successMessage($res);
         retriveRoles();
 
+    }
+    else {
+        errorMessage("Please Select a Role First.");
+        retriveRoles();
     }
 }
 else if (isset($_POST['roleViewBtn'])){
@@ -166,22 +186,22 @@ else if (isset($_POST['deleteBtn'])){
         $id = $_POST['idRB'];
         $arr = array($id);
         $res = insert_update_delete("st_deleteRoles", $arr, "Role Deleted Successfully.");
-        echo "<p class='text-center text-info'>$res</p>";
+        successMessage($res);
         retriveRoles();
     }
     else {
-        echo "<p class='text-center text-danger mt-2'>Please Select a Role first.</p>";
+        errorMessage("Please Select a Role First.");
         retriveRoles();
     }
 }
 else if (isset($_POST['editBtn'])){
     if (isset($_POST['idRB'])){
-        session_start();
+        // session_start();
         $_SESSION["roleID"] = $_POST['idRB'];
         retriveRoles4Edit();
     }
     else {
-        echo "<p class='text-center text-danger'>Please Select Any Role First.</p>";
+        errorMessage("Please Select a Role First.");
         retriveRoles();
     }
 }
@@ -190,13 +210,13 @@ else if (isset($_POST['updateBtn'])){
         $role_id = $_POST["idRB"];
         $role = validate($_POST['roleEditTxt']);
         $arr = array($role_id, $role);
-        $msg = insert_update_delete("st_updateRoles", $arr, "Record Updated Successfully");
-        echo "<p class='text-center text-info'>$msg</p>";
+        $res = insert_update_delete("st_updateRoles", $arr, "Record Updated Successfully");
+        successMessage($res);
         retriveRoles();
 
     }
     else {
-        echo "<p class='text-center text-danger'>Please Select Any Role First.</p>";
+        errorMessage("Please Select a Role First.");
         retriveRoles();
     }
 }

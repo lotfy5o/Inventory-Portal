@@ -97,12 +97,15 @@ else if (isset($_POST["id"])){
 </html>
 <?php
 // // I don't know the purpose of the next code..?..
+// if you get to this page not through the login it will redirect you to the authenticate page
+// cuz the $_session['name] isn't set yet
+// it wil be set if ($role == 'admin') in the authenticate.php
 
-// session_start();
-// if (isset($_SESSION["name"])){
+session_start();
+if (isset($_SESSION["name"])){
 
-// } else {
-//     header("Location:authenticate.html.php");
-// }
+} else {
+    header("Location:authenticate.html.php");
+}
 
 ?>
