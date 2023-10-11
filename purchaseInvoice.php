@@ -37,11 +37,11 @@
                     
                 <div class="col-4">
                     <label for="">Colors</label>
-                    <?php getList("st_getColors", "colDD", $con);   ?>
+                    <?php getList("st_getColors()", "colDD", $con);   ?>
                 </div>
                 <div class="col-4">
-                    <label for="">Product Name</label>
-                    <input type="text"   name="proTxt"   id="proTxt"   class="form-control form-control-sm">
+                    <label for="">Product</label>
+                    <?php getList("st_getProducts()", "proDD", $con);   ?>
                 </div>
                 <div class="col-4">
                     <label for="">Quantity</label>
@@ -115,7 +115,7 @@
         var count = 0;
         var grandTotal = 0;
         $("#addBtn").click(function(){
-            var product = $("#proTxt").val();
+            var product = $("#proDD").find(":selected").text();
             var quntity = $("#quantTxt").val();
             var perPiece = $("#pppTxt").val();
             var total = $("#totTxt").val();
