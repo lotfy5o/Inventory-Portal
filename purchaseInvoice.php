@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Purchase Invoice</title>
     <link rel="stylesheet" href="Styles/bootstrap.min.css">
+    <link rel="stylesheet" href="Styles/alert.css">
     <script src="Scripts/code.jquery.com_jquery-3.7.0.min.js"></script>
 </head>
 
@@ -17,7 +18,7 @@
             <div class="row">
                 <div class="col-4">
                     <label for="">Date</label>
-                    <input type="date" name="datePicker" class="form-control form-control-sm">
+                    <input type="date" id="datePicker" name="datePicker" class="form-control form-control-sm">
                 </div>
                 <div class="col-4">
                     <label for="">Supplier</label>
@@ -55,9 +56,10 @@
                     <label for="">Product Total</label>
                     <input type="text"   name="totTxt"   id="totTxt"   class="form-control form-control-sm" disabled>
                 </div>
-                <div class="">
+                <div class="col-8 offset-2">
                     <input type="button" name="addBtn"   id="addBtn"   class="btn btn-outline-info btn-sm mt-3 col-8 offset-2" value="Add Item">
                 </div>
+                
                 <div class="">
                     <label for="" id="errorLabel" class="alert alert-danger col-6 offset-3 mt-2">Please Enter all Fields</label>
                 </div>
@@ -82,6 +84,12 @@
                     </tr>
                 </tfoot>
             </table>
+            <div class="col-8 offset-2">
+                <input type="button" name="saveBtn"   id="saveBtn"   class="btn btn-outline-info btn-sm mt-3 col-8 offset-2" value="Save">
+            </div>
+            <div class="col-6 offset-3">
+              <label for="" id="resLabel" class="alert alert-info text-center container"></label>
+            </div>
                 
 
             </div>
@@ -92,6 +100,7 @@
 <script>
     $(document).ready(function(){
         $("#errorLabel").hide();
+        $("#resLabel").hide();
         // the problem was the getList it passes the selectName(catDD) in the name attribute
         // when it should be in the id attribute.
         $("#catDD").on('change',(function(){
@@ -122,6 +131,11 @@
             var cat = $("#catDD").find(":selected").text();
             var col = $("#colDD").find(":selected").text();
             var siz = $("#sizeDD").find(":selected").text();
+            var proID = $("#proDD").find(":selected").val();
+            var catID = $("#catDD").find(":selected").val();
+            var colID = $("#colDD").find(":selected").val();
+            var sizID = $("#sizeDD").find(":selected").val();
+            
             var blankCount = 0;
 
             blankCount += product ==""?blankCount+1:0;
@@ -141,9 +155,13 @@
                 $("#myTable").append(
                     "<tr>"  
                         +"<td>"+count+"</td>"
+                        +"<td hidden>"+proID+"</td>"
                         +"<td>"+product+"</td>"
+                        +"<td hidden>"+catID+"</td>"
                         +"<td>"+cat+"</td>"
+                        +"<td hidden>"+colID+"</td>"
                         +"<td>"+col+"</td>"
+                        +"<td hidden>"+sizID+"</td>"
                         +"<td>"+siz+"</td>"
                         +"<td>"+quntity+"</td>"
                         +"<td>"+perPiece+"</td>"
@@ -177,6 +195,7 @@
         $(this).closest("tr").remove();
 
        })
+   
         
         // there a problem in this blur:
         // if I enter quantity = 1, price = 100, and then reEnter another quan
@@ -189,5 +208,42 @@
                 $("#totTxt").val(res);
             }
         }));
+
+        $("#saveBtn").click(function(){
+            //////////////////// Purchase Invoice Code ///////////////
+            var purchaseArray = [];
+            purchaseArray.push($("#datePicker").val());
+            purchaseArray.push($("#suppDD").val());
+
+            /////////////////// Purchase Invoice Details Code ///////////////////
+            var purchaseDetails = [];
+            $("#myTable tbody tr").each(function(){
+                // he talked about multidimension array on 24:00 lec 25
+                // 1 => he didn't have the pid_purID of table purchseInvoiceDetails so he wrote anynumber
+                // eq(1) => proID => its position inside myTable is the at index 1
+                // eq(10) => perPiece, we entered perPiece after the proID cuz that's the next column inside the table of purchaseInvoiceDetials
+                purchaseDetails.push([
+                    1, // pid_purID
+                    $(this).find("td").eq(1).text(),  // pid_proID
+                    $(this).find("td").eq(10).text(), // pid_perPiecePrice
+                    $(this).find("td").eq(9).text(),  // pid_quantity
+                    $(this).find("td").eq(3).text(),  // pid_catID
+                    $(this).find("td").eq(7).text(),  // pid_sizeID
+                    $(this).find("td").eq(5).text()   // pid_colID
+                ]);
+
+            });
+
+
+            $.ajax({
+                url:"insert.php",
+                type:"POST",
+                data:{purchaseArray:purchaseArray, purchaseDetails:purchaseDetails},
+                success:function(obj){
+                    $("#resLabel").show(500);
+                    $("#resLabel").html(obj);
+                }
+            });
+        });
     });
 </script>
