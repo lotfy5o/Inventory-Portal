@@ -155,7 +155,7 @@
                 $("#myTable").append(
                     "<tr>"  
                         +"<td>"+count+"</td>"
-                        +"<td hidden>"+proID+"</td>"
+                        +"<td hidden>"+proID+"</td>" // I hid it so it won't appear to the user, and also to be able to fetch it
                         +"<td>"+product+"</td>"
                         +"<td hidden>"+catID+"</td>"
                         +"<td>"+cat+"</td>"
@@ -212,6 +212,7 @@
         $("#saveBtn").click(function(){
             //////////////////// Purchase Invoice Code ///////////////
             var purchaseArray = [];
+            // I picked up the date and the supplier cuz that's the columns of the purchaseInvoice table 
             purchaseArray.push($("#datePicker").val());
             purchaseArray.push($("#suppDD").val());
 
@@ -222,9 +223,11 @@
                 // 1 => he didn't have the pid_purID of table purchseInvoiceDetails so he wrote anynumber
                 // eq(1) => proID => its position inside myTable is the at index 1
                 // eq(10) => perPiece, we entered perPiece after the proID cuz that's the next column inside the table of purchaseInvoiceDetials
-                purchaseDetails.push([
-                    1, // pid_purID
+                purchaseDetails.push([ // get the IDs of the rows of the table myTable and put inside an array
+                    // 1, // pid_purID
                     $(this).find("td").eq(1).text(),  // pid_proID
+                    // (this) represent the current row => ("#myTable tbody ((tr))")
+                    // eq(1) represent the first td that shows up, while eq(10) is the tenth td in the table 
                     $(this).find("td").eq(10).text(), // pid_perPiecePrice
                     $(this).find("td").eq(9).text(),  // pid_quantity
                     $(this).find("td").eq(3).text(),  // pid_catID

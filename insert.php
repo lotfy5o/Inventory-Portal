@@ -7,36 +7,50 @@
 </head>
 <body>
     <?php
-    if (isset($_POST['purchaseArray']) && isset($_POST['purchaseDetails'])){
-        $purchaseData = $_POST['purchaseArray'];
-        // echo $purchaseData[0] . "    " . $purchaseData[1];
-        $purchaseDetails = $_POST['purchaseDetails'];
+    include "connection.php";
+    include "crud.php";
 
-        echo $purchaseDetails[0][0];
-        echo " ";
-        echo $purchaseDetails[0][1];
-        echo " ";
-        echo $purchaseDetails[0][2];
-        echo " ";
-        echo $purchaseDetails[0][3];
-        echo " ";
-        echo $purchaseDetails[0][4];
-        echo " ";
-        echo $purchaseDetails[0][5];
+    if (isset($_POST['purchaseArray']) && isset($_POST['purchaseDetails'])){
+        $piArray = $_POST['purchaseArray'];
+
+        // (1) insert data of the purchaseInvoice => date, supplier
+        insert_update_delete("st_insertPurchaseInvoice", $piArray, "");
+
+
         
-        echo "<br>";
+        $query = "Call st_getLastPurchaseID()";
+        $res = mysqli_query($con, $query);
+        // I won't need while since its one row
+        $row = mysqli_fetch_row($res);
+        $purID = $row[0];
+
+        $pidArray = $_POST['purchaseDetails'];
+        // this variable to check if the querty st_insertPuchaseInvoiceDetails was successfull
+        $count = 0;
+        for ($i = 0; $i < count($pidArray); $i++){
+            mysqli_next_result($con);
+            // mutli-array with the i represents the rows of #myTable and 0 represent the column of proID
+            $pro  = $pidArray[$i][0]; 
+            $pp   = $pidArray[$i][1]; 
+            $quan = $pidArray[$i][2]; 
+            $cat  = $pidArray[$i][3]; 
+            $size = $pidArray[$i][4]; 
+            $col  = $pidArray[$i][5]; 
+
+            $query = "CALL st_insertPurchaseInvoiceDetails($purID, $pro, $pp, $quan, $cat, $size, $col);";
+            $query = $query . "CALL st_insertStock($pro, $quan, $purID);";
+            if (mysqli_multi_query($con, $query)){
+                $count += 1;
+            }
+        }
+        if ($count > 0){
+            echo "$count" . " Record Added Successfully";
+        }
+        else {
+            echo "Unable to Add Purchase Details";
+        }
+
         
-        echo $purchaseDetails[1][0];
-        echo " ";
-        echo $purchaseDetails[1][1];
-        echo " ";
-        echo $purchaseDetails[1][2];
-        echo " ";
-        echo $purchaseDetails[1][3];
-        echo " ";
-        echo $purchaseDetails[1][4];
-        echo " ";
-        echo $purchaseDetails[1][5];
         
               
     }
