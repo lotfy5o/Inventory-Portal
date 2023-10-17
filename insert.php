@@ -38,8 +38,12 @@
             $col  = $pidArray[$i][5]; 
 
             $query = "CALL st_insertPurchaseInvoiceDetails($purID, $pro, $pp, $quan, $cat, $size, $col);";
-            $query = $query . "CALL st_insertStock($pro, $quan, $purID);";
+            $query = $query . "CALL st_insertStock($pro, $quan, $purID, $cat, $size, $col);"; // notice the semicolon thats a string
+            $query = $query . "CALL st_insertProductPrice($pro, $pp, $cat, $size, $col);";
+            // the first $query is for pid and the second is for the stock table
             if (mysqli_multi_query($con, $query)){
+                while(mysqli_next_result($con)){;}
+
                 $count += 1;
             }
         }
