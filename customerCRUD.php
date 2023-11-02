@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Management</title>
     <link rel="stylesheet" href="Styles/bootstrap.min.css">
+    <style>
+        .alert {
+        margin-bottom: 1px;
+        height: 30px;
+        line-height:30px;
+        padding:0px 15px;
+        }
+    </style>
 
 </head>
 <body>
@@ -13,7 +21,7 @@
     <div class="container">
         <div class="col-6 offset-3">
             <form action="" method="post">
-                <input type='hidden' value='3'>
+                <input type='hidden' value='8'>
                 <div class="form-group">
                     <label for="">Name</label>
                     <input type="text" name="nameTxt" class="form-control form-control-sm">
@@ -186,7 +194,7 @@ function retrieve (){
             echo "<div class='col-8 offset-2'>";
             echo "<table class='table table-bordered table-hover'>";
             echo "<form action='' method='post'>";
-            echo "<input type='hidden' name='id' value='3'>";
+            echo "<input type='hidden' name='id' value='8'>";
         
             echo "<thead>";
             echo "<th>ID</th>" . 
@@ -239,7 +247,7 @@ function retrieve4Edit (){
             echo "<div class='col-8 offset-2'>";
             echo "<table class='table table-bordered table-hover'>";
             echo "<form action='' method='post'>";
-            echo "<input type='hidden' name='id' value='3'>";
+            echo "<input type='hidden' name='id' value='8'>";
         
             echo "<thead>";
             echo "<th>ID</th>" . 

@@ -123,110 +123,8 @@
         }));
         var count = 0;
         var grandTotal = 0;
-        // the commented addBtn has something wrong but I don't know what
-        // $("#addBtn").click(function(){
-        //     var product = $("#proDD").find(":selected").text();
-        //     var quntity = $("#quantTxt").val();
-        //     var perPiece = $("#pppTxt").val();
-        //     var total = $("#totTxt").val();
-        //     var cat = $("#catDD").find(":selected").text();
-        //     var col = $("#colDD").find(":selected").text();
-        //     var siz = $("#sizeDD").find(":selected").text();
-        //     var proID = $("#proDD").find(":selected").val();
-        //     var catID = $("#catDD").find(":selected").val();
-        //     var colID = $("#colDD").find(":selected").val();
-        //     var sizID = $("#sizeDD").find(":selected").val();
-        //     var flag = 0;
-
-        //     //////////////////////////////////////////////////////
-        //     $("#myTable tbody tr").each(function(){
-        //         // if the same exact product (same product, cat, size, col) update the quantity and the price in the same row
-        //         // don't make another row
-        //         if (
-        //         $(this).find("td").eq(1).text() == proID &&
-        //         $(this).find("td").eq(3).text() == catID &&
-        //         $(this).find("td").eq(5).text() == colID &&
-        //         $(this).find("td").eq(7).text() == sizeID
-        //          ){
-        //             flag = 1;
-        //             if (flag == 1) {
-        //                 // change quan in the row by what's been submitted
-        //                 $(this).find("td").eq(9).text(quntity); 
-        //                 $(this).find("td").eq(10).text(perPiece);
-        //                 var newQuan = $(this).find("td").eq(9).text();
-        //                 var newPrice = $(this).find("td").eq(10).text() 
-        //                 var newTotal = newQuan * newPrice;
-        //                 $("#totalTD").html(newTotal);
-        //                 flag = 0;
-        //             }
-
-        //         }
-
-                
-                
-
-        //     });
-
-
-        //     ////////////////////////////////////////////
-            
-        //     var blankCount = 0;
-
-        //     blankCount += product ==""?blankCount+1:0;
-        //     blankCount += quntity ==""?blankCount+1:0;
-        //     blankCount += perPiece ==""?blankCount+1:0;
-        //     blankCount += total ==""?blankCount+1:0;
-        //     blankCount += cat ==""?blankCount+1:0;
-        //     blankCount += siz ==""?blankCount+1:0;
-            
-        //     if (blankCount > 0){
-        //         $("#errorLabel").show(500);
-        //     } 
-        //     else if (blankCount == 0){
-        //         count = count + 1;
-        //         grandTotal += (quntity * perPiece);
-
-        //         // no exact match of rows in myTable, add a new row
-        //         if (flag == 0){
-
-        //             $("#myTable").append(
-        //                 "<tr>"  
-        //                     +"<td>"+count+"</td>"
-        //                     +"<td hidden>"+proID+"</td>" // I hid it so it won't appear to the user, and also to be able to fetch it
-        //                     +"<td>"+product+"</td>"
-        //                     +"<td hidden>"+catID+"</td>"
-        //                     +"<td>"+cat+"</td>"
-        //                     +"<td hidden>"+colID+"</td>"
-        //                     +"<td>"+col+"</td>"
-        //                     +"<td hidden>"+sizID+"</td>"
-        //                     +"<td>"+siz+"</td>"
-        //                     +"<td>"+quntity+"</td>"
-        //                     +"<td>"+perPiece+"</td>"
-        //                     +"<td id='totalTD'>"+quntity*perPiece+"</td>"
-        //                     +"<td><input type='button' class='btn btn-outline-info btn-sm' value='REMOVE' id='removeBtn'/></td>"
-        //                 +"</tr>"
-                            
-                            
-        //             );
-        //             $("#errorLabel").hide(500);
-        //             $("#grandLabel").text(grandTotal);
     
-        //             $("#proTxt").val("");
-        //             $("#quantTxt").val("");
-        //             $("#pppTxt").val("");
-        //             $("#totTxt").val("");
-        //             $("#catDD").val(-1);
-        //             $("#colDD").val(-1);
-        //             $("#sizeDD").val(-1);
-                    
-        //             // -1 here referes to the value of "Choose..." that appears in ther first select
-        //             // of the dropDown
-        //         }
-        //     }
-
-            
-        // });
-        $("#addBtn").click(function(){
+    $("#addBtn").click(function(){
     var product = $("#proDD").find(":selected").text();
     var quntity = $("#quantTxt").val();
     var perPiece = $("#pppTxt").val();
@@ -272,7 +170,16 @@
                 var newQuan = $(this).find("td").eq(9).text();
                 var newPrice = $(this).find("td").eq(10).text();
                 var newTotal = newQuan * newPrice;
+                var oldTotal = $(this).find("td").eq(11).text();
+                var diff = newTotal - oldTotal;
+
+
+                // update the same exact product in the same row
                 $(this).find("td").eq(11).text(newTotal);
+
+
+                grandTotal += diff;
+                $("#grandLabel").text(grandTotal);
              
             }
             
@@ -319,8 +226,15 @@
 });
 
        $(document).on('click', '#removeBtn', function(){
-        var totalTD = $("#totalTD").html();
-        grandTotal -= totalTD;
+        
+        // this line was => totalTD = $("#totalTD").html(); 
+        // incorrect because it uses a static ID selector (#totalTD) to target the total cell in the table. 
+        // In an HTML document, each element should have a unique ID within the page, 
+        // and the #totalTD selector will always target the first element with that ID. 
+        // This is problematic because when you have multiple rows in your table, 
+        // each with a total cell, you need to be able to identify the specific cell you want to update or remove.
+        var totalTD = $(this).closest('tr').find('[id^="totalTD"]').text();
+        grandTotal -= parseFloat(totalTD);
         $("#grandLabel").text(grandTotal);
         $(this).closest("tr").remove();
 

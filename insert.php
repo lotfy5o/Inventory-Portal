@@ -42,13 +42,13 @@
             $query = $query . "CALL st_insertProductPrice($pro, $pp, $cat, $size, $col);";
             // the first $query is for pid and the second is for the stock table
             if (mysqli_multi_query($con, $query)){
-                while(mysqli_next_result($con)){;}
+                while(mysqli_next_result($con)){;} // if I didn't add this line => command out of sync
 
                 $count += 1;
             }
         }
         if ($count > 0){
-            echo "$count" . " Record Added Successfully";
+            echo "$count" . " Record Added Successfully" . mysqli_error($con);
         }
         else {
             echo "Unable to Add Purchase Details";
