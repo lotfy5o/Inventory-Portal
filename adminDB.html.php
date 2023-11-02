@@ -1,5 +1,12 @@
 <?php
 
+session_start();
+if (isset($_SESSION["name"])){
+
+} else {
+    header("Location:authenticate.html.php");
+    exit;
+}
 $page_id = 0;
 if(isset($_GET["id"])){
     $page_id = $_GET["id"]; // the id = 1 from get
@@ -31,6 +38,7 @@ else if (isset($_POST["id"])){
                 <div class="list-group list-group-flush">
                     <a class="list-group-item list-group-item-action bg-light" href="#">Dashboard</a>
                     <!-- I added the query parameters (?id=1) so that I can use the Get method -->
+                    <a class="list-group-item list-group-item-action list-group-item-light p-3" href="adminDB.html.php?id=10">Owners</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="adminDB.html.php?id=1">Roles</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="adminDB.html.php?id=2">Users</a>
                     <a class="list-group-item list-group-item-action list-group-item-light p-3" href="adminDB.html.php?id=3">Suppliers</a>
@@ -51,7 +59,7 @@ else if (isset($_POST["id"])){
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <a class="navbar-nav ms-auto mt-2 mt-lg-0" href="logout.php">
-                               <?php session_start(); $name = $_SESSION["name"]; echo "Welcome $name ";   ?>
+                               <?php $name = $_SESSION["name"]; echo "Welcome $name ";   ?>
                                LOGOUT
                             </a>
                         </div>
@@ -87,6 +95,9 @@ else if (isset($_POST["id"])){
                     else if ($page_id == 9){
                         include "productCRUD.php";
                     }
+                    else if ($page_id == 10){
+                        include "ownerCRUD.php";
+                    }
                   
                     ?>
                 
@@ -105,11 +116,5 @@ else if (isset($_POST["id"])){
 // cuz the $_session['name] isn't set yet
 // it wil be set if ($role == 'admin') in the authenticate.php
 
-session_start();
-if (isset($_SESSION["name"])){
-
-} else {
-    header("Location:authenticate.html.php");
-}
 
 ?>
