@@ -130,7 +130,10 @@ else if (isset($_POST['viewBtn'])){
 else if (isset($_POST['editBtn'])){
      
     if (isset($_POST['idRB'])){
-        session_start();
+        if (session_status() === PHP_SESSION_NONE){
+
+            session_start();
+        }
         $_SESSION['suppID'] = $_POST['idRB'];
         retrieve4Edit();
     }
@@ -149,7 +152,9 @@ else if (isset($_POST['updateBtn'])){
         // $address = $_POST['address'];
         // when I did the 3 line above this error happens:
         // Warning: Undefined array key "name"
-        if (!empty($name) && !empty($phone) && !empty($address)){
+        // I used to do this inside of the empty function => !empty($name), name = $_post['name]
+        // but when u edit a component on the list, if you updated just the address it will give u => some data messing
+        if (!empty($_POST['name']) && !empty($_POST['phone']) && !empty($_POST['address'])){
             $name    = validate($_POST['name']);
             $phone   = validate($_POST['phone']);
             $address = validate($_POST['address']);

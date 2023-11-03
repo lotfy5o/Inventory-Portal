@@ -3,208 +3,305 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Owners Management</title>
+    <title>Owner Management</title>
     <link rel="stylesheet" href="Styles/bootstrap.min.css">
-    
-    <script defer src="Scripts/bootstrap.bundle.min.js"></script>
     <style>
         .alert {
-        margin bottom: 1px;
+        margin-bottom: 1px;
         height: 30px;
         line-height:30px;
         padding:0px 15px;
         }
     </style>
+
 </head>
 <body>
-  
-<div class="container">
-    <div class="col-8 offset-2">
-        <h2 class="text-center display-4" style="margin-top: 20px;">Owner Management</h2>
-        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="post" id="ownerForm">
-            <div class="form-group col-4 offset-4">
-                <label for="">Name</label>
-                <input type="text" name="nameTxt" class="form-control form-control-sm">
-            </div>
-            <div class="form-group col-4 offset-4">
-                <label for="">Phone</label>
-                <input type="text" name="phoneTxt" class="form-control form-control-sm">
-            </div>
-            <div class="form-group col-4 offset-4">
-                <label for="">Address</label>
-                <input type="text" name="addrTxt" class="form-control form-control-sm">
-            </div>
-            <div class="form-group">
-                <input type="submit" value="ADD Owner" name="ownerSubmitBtn" class="btn btn-sm btn-success col-3 offset-3 my-3">
-                <input type="submit" value="View Owners" name="ownerViewBtn" class="btn btn-sm btn-primary col-3">
-                <input type="hidden" name="id" value="1">
-                <hr style="visibility: hidden; margin: 0;">
-            </div>
-        </form>
-        <?php
-        include "connection.php";
-        include "crud.php";
-        include "validate.php";
-        include "message.php";
+    <h1 class="text-center">Owner Management</h1>
+    <hr>
+    <div class="container">
+        <div class="col-6 offset-3">
+            <form action="" method="post">
+                <input type='hidden' value='10'>
+                <div class="form-group">
+                    <label for="">Name</label>
+                    <input type="text" name="nameTxt" class="form-control form-control-sm">
+                </div>
+                <div class="form-group">
+                    <label for="">Phone</label>
+                    <input type="text" name="phoneTxt" class="form-control form-control-sm">
+                </div>
+                <div class="form-group">
+                    <label for="">Address</label>
+                    <input type="text" name="addressTxt" class="form-control form-control-sm">
+                </div>
+                <div class="form-group">
+                    <label for="">Opening Balance</label>
+                    <input type="text" name="obTxt" class="form-control form-control-sm">
+                </div>
+                <div>
+                    <input type="submit" name="saveBtn" value="Save" class="btn btn-primary btn-sm col-4 offset-2 my-2">
+                    <input type="submit" name="viewBtn" value="View" class="btn btn-primary btn-sm col-4">
+                </div>
+            </form>
 
-        function retriveOwners(){
-            global $con;
-
-            // to display all the owners using select statement
-            $query = "CALL st_getOwner();";
-            $result = mysqli_query($con, $query);
-            while(mysqli_next_result($con)){;}
-            if (mysqli_num_rows($result) > 0){
-
-                echo "<div class='col-8 offset-2'>";
-                echo "<table class='table table-hover table-responsive-sm'>";
-                echo "<tr>";
-                echo "<th>ID</th><th>Owner</th><th>Phone</th><th>Address</th><th class='text-end'>Actions</th>";
-                echo "</tr>"; 
-                echo "<form action='' method='POST'>";
-                while($row = mysqli_fetch_row($result)) {
-                    echo "<tr>";
-                    echo "<td><input type='radio' value='$row[0]'
-                    name='idRB' class='custom-radio'/></td>" . 
-                    "<td>$row[1]</td>" . 
-                    "<td>$row[2]</td>" . 
-                    "<td>$row[3]</td>" . 
-                    "<td class='text-end'>" . 
-                        "<input type='submit' value='EDIT' name='editBtn'     class='btn btn-sm btn-warning mx-2'/>" .
-                        "<input type='submit' value='UPDATE' name='updateBtn' class='btn btn-sm btn-success mx-2'/>" .
-                        "<input type='submit' value='DELETE' name='deleteBtn' class='btn btn-sm btn-danger'/>" . 
-                        "<input type='hidden' name='id' value='1'>" . 
-                    "</td>";
-                    
-        
-                    echo "</tr>";
-                }
-                echo "</table>";
-                echo "</form>";
-                echo "</div>";
-            }
-            else {
-                errorMessage("No Record Available");
-            }
-
-        }
-
-        function retriveOwners4Edit(){
-            $owner_id = $_SESSION["ownerID"];
-
-            global $con;
-
-            $query = "CALL st_getOwner();";
-            
-            $result = mysqli_query($con, $query);
-            while(mysqli_next_result($con)){;}
-            
-            echo "<div class='col-8 offset-2'>";
-            echo "<form action='' method='POST'>";
-
-            echo "<table class='table table-hover'>";
-            echo "<tr>";
-            echo "<th>ID</th><th>Owner</th><th>Phone</th><th>Address</th><th class='text-end'>Actions</th>";
-            echo "</tr>"; 
-            
-            echo "<form action='' method='POST'>";
-            while($row = mysqli_fetch_row($result)) {
-                echo "<tr>";
-                if ($owner_id == $row[0]){
-                    echo 
-                    "<td><input type='radio' value='$row[0]'   name='idRB' class='custom-radio' checked/></td>" . 
-                    "<td><input type='textbox' value='$row[1]' name='nameTxt' class='form-control form-control-sm'/></td>" . 
-                    "<td><input type='textbox' value='$row[2]' name='phoneTxt' class='form-control form-control-sm'/></td>" . 
-                    "<td><input type='textbox' value='$row[3]' name='addrTxt' class='form-control form-control-sm'/></td>" . 
-                    "<td class='text-end'>" . 
-                    "<input type='submit' value='EDIT'   name='editBtn'   class='btn btn-sm btn-warning mx-2'/>".
-                    "<input type='submit' value='UPDATE' name='updateBtn' class='btn btn-sm btn-success mx-2'/>".
-                    "<input type='submit' value='DELETE' name='deleteBtn' class='btn btn-sm btn-danger'/>" . 
-                    "</td>";
-                }
-                else {
-                    echo 
-                    "<td><input type='radio' value='$row[0]' name='idRB' class='custom-radio' /></td>" . 
-                    "<td>$row[1]</td>" . 
-                    "<td class='text-end'>" . 
-                    "<input type='submit' value='EDIT'   name='editBtn'   class='btn btn-sm btn-warning mx-2'/>".
-                    "<input type='submit' value='UPDATE' name='updateBtn' class='btn btn-sm btn-success mx-2'/>".
-                    "<input type='submit' value='DELETE' name='deleteBtn' class='btn btn-sm btn-danger'/>" . 
-                    "</td>";
-                }
-                echo "</tr>";
-            }
-            echo "</table>";
-            echo "<input type='hidden' name='id' value='1'>";
-            echo "</form>";
-            echo "</div>";
-            echo "</form>";
-        }
-
-        ?>
+        </div>
 
     </div>
-
-</div>
+    
 </body>
 </html>
-
 <?php
-if (isset($_POST["ownerSubmitBtn"])){
-    $name = validate($_POST["nameTxt"]);
-    $phone = validate($_POST["phoneTxt"]);
-    $addr = validate($_POST["addrTxt"]);
-    if (!empty($name) && !empty($phone) && !empty($addr) ){
-        $arr = array($name, $phone, $addr);
-        $res = insert_update_delete("st_insertOwner", $arr, "$name Added Successfully.");
-        successMessage($res);
-        retriveOwners();
+include "connection.php";
+include "validate.php";
+include "crud.php";
+include "loadList.php";
+
+if (isset($_POST['saveBtn'])){
+    $name    = $_POST['nameTxt'];
+    $phone   = $_POST['phoneTxt'];
+    $address = $_POST['addressTxt'];
+    $ob      = $_POST['obTxt'];
+    
+    if (!empty($name) && !empty($phone) && !empty($address) && !empty($ob)){
+        // I didn't do !empty($ob) cuz I won't be able to add a Owner with a balance of zero
+        // the prog will consider it to be empty and will return "data is missing".
+        $name = validate($name);
+        $phone = validate($phone);
+        $address = validate($address);
+        $ob = validate($ob);
+        $bal = 0;
+        $arr = array($name, $phone, $address);
+        insert_update_delete("st_insertOwner", $arr, "$name added Successfully");
+               
+        
+        if ($ob > 0){
+            // $dt = getdate(); getdate returns an array which will colide with the arr I am making
+            
+            $debit = $ob;
+            $credit = 0;
+            
+            
+        }
+        else if ($ob < 0){
+            
+            $debit = 0;
+            $credit = abs($ob);
+        }
+        else if ($ob == 0){
+            $debit = 0;
+            $credit = 0;
+            
+        }
+
+        $dt = gmdate("y-m-d"); // 21-Feb-2020
+        $descr = "Opening Balance";
+        $bal = $bal + $debit - $credit;
+        $ownID = getLastID("st_getLastOwnerID()", $con);
+        $arr2 = array($dt, $ownID, $descr, $debit, $credit, $bal);
+        $msg = insert_update_delete("st_insertOwnerLedger", $arr2, "$name added Successfully");
+        echo "<p class='text-info text-center'>$msg</p>";
+
     }
     else {
-        errorMessage("Please Select an Owner First.");
-        retriveOwners();
+        echo "<p class='text-danger text-center'>The form is messing data</p>";
     }
+    retrieve();
+
 }
-else if (isset($_POST['ownerViewBtn'])){
-    retriveOwners();
+else if (isset($_POST['viewBtn'])){
+    retrieve();
+}
+
+else if (isset($_POST['editBtn'])){
+     
+    if (isset($_POST['idRB'])){
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $_SESSION['ownID'] = $_POST['idRB'];
+        retrieve4Edit();
+    }
+    else {
+        echo "<div class='container col-6'>";
+        echo "<p class='alert alert-danger text-center'>Please Select a Owner</p>";
+        echo "</div>";
+        retrieve();
+    }
+        
+}
+else if (isset($_POST['updateBtn'])){
+    if (isset($_POST['idRB'])){
+        // $name    = $_POST['name'];
+        // $phone   = $_POST['phone'];
+        // $address = $_POST['address'];
+        // when I did the 3 line above this error happens:
+        // Warning: Undefined array key "name"
+        if (!empty($_POST['name']) && !empty($_POST['phone']) && !empty($_POST['address'])){
+            $name    = validate($_POST['name']);
+            $phone   = validate($_POST['phone']);
+            $address = validate($_POST['address']);
+            $ownerID = validate($_POST['idRB']);
+            $arr = array($name, $phone, $address, $ownerID);
+            $msg = insert_update_delete("st_updateOwner", $arr, "$name Upadated Successfully");
+            echo "<p class='text-info text-center'>$msg</p>";
+        }
+        else {
+            
+            echo "<p class='text-danger text-center'>Some Data are Empty</p>";
+        }
+
+    }
+    else {
+        echo "<div class='container col-6'>";
+        echo "<p class='alert alert-danger text-center'>Please Select an Owner</p>";
+        echo "</div>";
+    }
+    retrieve();
+
 }
 else if (isset($_POST['deleteBtn'])){
     if (isset($_POST['idRB'])){
         $id = $_POST['idRB'];
         $arr = array($id);
-        $res = insert_update_delete("st_deleteOwner", $arr, "Owner Deleted Successfully.");
-        successMessage($res);
-        retriveOwners();
+        $msg = insert_update_delete("st_deleteOwner", $arr, "Owner Deleted Successfully");
+        echo "<p class='text-info text-center'>$msg</p>";
     }
     else {
-        errorMessage("Please Select an Owner First.");
-        retriveOwners();
+        echo "<div class='container col-6'>";
+        echo "<p class='alert alert-danger text-center'>Please Select a Owner</p>";
+        echo "</div>";
+ 
     }
+    retrieve();
+
+
 }
-else if (isset($_POST['editBtn'])){
-    if (isset($_POST['idRB'])){
-        $_SESSION["ownerID"] = $_POST['idRB'];
-        retriveOwners4Edit();
+
+function retrieve (){
+    global $con;
+    if ($con){
+
+        $query = "CALL st_getOwners();";
+        $result = mysqli_query($con, $query);
+        while(mysqli_next_result($con)){;}
+
+        if (mysqli_num_rows($result) > 0){
+            echo "<div class='col-8 offset-2'>";
+            echo "<table class='table table-bordered table-hover'>";
+            echo "<form action='' method='post'>";
+            echo "<input type='hidden' name='id' value='10'>";
+        
+            echo "<thead>";
+            echo "<th>ID</th>" . 
+                 "<th>Name</th>" . 
+                 "<th>Phone</th>" . 
+                 "<th>Address</th>" .
+                 "<th>Opening Balance</th>" .
+                 "<th>Actions</th>" ;
+            echo "</thead>";     
+            while ($row = mysqli_fetch_row($result)){
+                echo "<tr>";
+                echo "<td><input type='radio' name='idRB' value='$row[0]'/></td>";
+                echo "<td>$row[1]</td>";
+                echo "<td>$row[2]</td>";
+                echo "<td>$row[3]</td>";
+                echo "<td>$row[4]</td>";
+                echo "<td>" . 
+                     "<input type='submit' name='editBtn'   value='Edit'   class='btn btn-info btn-sm' />" . 
+                     "<input type='submit' name='updateBtn' value='Update' class='btn btn-success btn-sm mx-1' />" . 
+                     "<input type='submit' name='deleteBtn' value='Delete' class='btn btn-warning btn-sm' />" ; 
+                echo "</td>";
+                echo "</tr>";
+        
+            }
+        
+            echo "</form>";
+            echo "</table>";
+            echo "</div>";
+        }
+        else {
+            echo "<p class='text-primary text-center'>No Owner Available</p>";
+        }
+    
     }
     else {
-        errorMessage("Please Select an Owner First.");
-        retriveOwners();
+        echo "No";
     }
 }
-else if (isset($_POST['updateBtn'])){
-    if (isset($_POST['idRB'])){
-        $owner_id = $_POST["idRB"];
-        $name = validate($_POST["nameTxt"]);
-        $phone = validate($_POST["phoneTxt"]);
-        $addr = validate($_POST["addrTxt"]);
-        $arr = array($name, $phone, $addr, $owner_id);
-        $res = insert_update_delete("st_updateOwner", $arr, "Record Updated Successfully");
-        successMessage($res);
-        retriveOwners();
+function retrieve4Edit (){
+    global $con;
+    if ($con){
+
+        $query = "CALL st_getOwners();";
+        $result = mysqli_query($con, $query);
+        while(mysqli_next_result($con)){;}
+
+        if (mysqli_num_rows($result) > 0){
+            echo "<div class='col-8 offset-2'>";
+            echo "<table class='table table-bordered table-hover'>";
+            echo "<form action='' method='post'>";
+            echo "<input type='hidden' name='id' value='10'>";
+        
+            echo "<thead>";
+            echo "<th>ID</th>" . 
+                 "<th>Name</th>" . 
+                 "<th>Phone</th>" . 
+                 "<th>Address</th>" .
+                 "<th>Opening Balance</th>" .
+                 "<th class='col-3'>Actions</th>" ;
+            echo "</thead>";     
+            while ($row = mysqli_fetch_row($result)){
+                if ($_SESSION['ownID'] == $row[0]){
+
+                    echo "<tr>";
+                    echo "<td><input type='radio'   name='idRB'    value='$row[0]' class='custom-radio' checked/></td>";
+                    echo "<td><input type='textbox' name='name'    value='$row[1]' class='form-control form-control-sm'/></td>";
+                    echo "<td><input type='textbox' name='phone'   value='$row[2]' class='form-control form-control-sm'/></td>";
+                    echo "<td><input type='textbox' name='address' value='$row[3]' class='form-control form-control-sm'/></td>";
+                    echo "<td><input type='textbox' name='ob'      value='$row[4]' class='form-control form-control-sm' disabled/></td>";
+                    echo "<td>" . 
+                         "<input type='submit' name='editBtn'   value='Edit'   class='btn btn-info btn-sm' />" . 
+                         "<input type='submit' name='updateBtn' value='Update' class='btn btn-success btn-sm mx-1' />" . 
+                         "<input type='submit' name='deleteBtn' value='Delete' class='btn btn-warning btn-sm' />" ; 
+                    echo "</td>";
+                    echo "</tr>";
+                }
+                else {
+                    echo "<tr>";
+                    echo "<td><input type='radio' name='idRB' value='$row[0]'/></td>";
+                    echo "<td>$row[1]</td>";
+                    echo "<td>$row[2]</td>";
+                    echo "<td>$row[3]</td>";
+                    echo "<td>$row[4]</td>";
+                    echo "<td>" . 
+                         "<input type='submit' name='editBtn'   value='Edit'   class='btn btn-info btn-sm' />" . 
+                         "<input type='submit' name='updateBtn' value='Update' class='btn btn-success btn-sm mx-1' />" . 
+                         "<input type='submit' name='deleteBtn' value='Delete' class='btn btn-warning btn-sm' />" ; 
+                    echo "</td>";
+                    
+                    echo "</tr>";
+                }
+        
+            }
+
+        
+            echo "</form>";
+            echo "</table>";
+            echo "</div>";
+        }
+        else {
+            echo "<div class='container col-6'>";
+            echo "<p class='alert-info text-center'>No Owner Available</p>";
+            echo "</div>";
+        }
+    
     }
     else {
-        errorMessage("Please Select an Owner First.");
-        retriveOwners();
+        echo "No";
     }
 }
+
+
 ?>
